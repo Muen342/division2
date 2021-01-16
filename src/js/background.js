@@ -7,7 +7,6 @@ chrome.alarms.onAlarm.addListener(buttonClicked);
 function buttonClicked(alarm){
     chrome.windows.create({
         url: "display.html",
-        state:"fullscreen"
       }
-        );
+    );
 }
