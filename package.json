@@ -1,12 +1,14 @@
 {
-  "name": "chrome-extension-webpack",
+  "name": "di-vision",
   "version": "0.0.1",
-  "description": "A boilerplate to chrome extension with webpack",
+  "description": "Set reminders to rest your eyes and stretch",
   "scripts": {
     "build": "node utils/build.js",
     "start": "node utils/webserver.js"
   },
   "devDependencies": {
+    "@tensorflow-models/face-landmarks-detection": "0.0.1",
+    "@tensorflow/tfjs": "2.6.0",
     "clean-webpack-plugin": "3.0.0",
     "copy-webpack-plugin": "5.0.5",
     "css-loader": "3.2.0",

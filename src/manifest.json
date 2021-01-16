@@ -1,10 +1,9 @@
 {
+  "name": "Chrome Extension Di | Vision",
   "manifest_version": 2,
   "version": "0.1",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-
   "permissions": ["storage", "alarms", "tabs"],
-  "name": "Chrome Extension Di/VIsion",
   "options_page": "options.html",
 
   "content_script":[
