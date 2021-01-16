@@ -6,7 +6,8 @@ chrome.alarms.onAlarm.addListener(buttonClicked);
 
 function buttonClicked(alarm){
     chrome.windows.create({
-        url: "background.html"}
+        url: "display.html",
+        state:"fullscreen"
+      }
         );
-    alert("Beep");
 }
