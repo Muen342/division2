@@ -1,16 +1,28 @@
 {
-  "name": "Chrome Extension Webpack",
+  "name": "Chrome Extension Di | Vision",
+  "manifest_version": 2,
+  "version": "0.1",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "permissions": ["storage", "alarms", "tabs"],
   "options_page": "options.html",
+
+  "content_script":[
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js":["js/content.js"]
+    }],
+
   "background": {
-    "page": "background.html"
+    "scripts": ["js/background.js"]
   },
+
   "browser_action": {
     "default_popup": "popup.html",
-    "default_icon": "icon-34.png"
+    "default_icon": "img/icon-34.png"
   },
+
   "icons": {
-    "128": "icon-128.png"
-  },
-  "manifest_version": 2,
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    "128": "img/icon-128.png"
+  }
+  
 }
