@@ -4,11 +4,11 @@
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": ["storage", "alarms", "tabs"],
   "options_page": "options.html",
-
-  "content_script":[
+  
+  "content_scripts":[
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js":["js/content.js"]
+      "js":["content.bundle.js"]
     }],
 
   "background": {
@@ -23,5 +23,4 @@
   "icons": {
     "128": "icon-128.png"
   }
-  
 }
