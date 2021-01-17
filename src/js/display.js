@@ -27,8 +27,8 @@ const initVideoContainer = (model) => {
 }
 
 const main = async () => {
-  let timerTag = document.getElementsByTagName('p');
-  timerTag[0].textContent = "Time: 0s";
+  let timerTag = document.getElementById('timer');
+  timerTag.textContent = "0 seconds";
   const model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
   const webcamStream = await window.navigator.mediaDevices.getUserMedia({ video: true });

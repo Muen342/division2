@@ -42,8 +42,8 @@ const handlePredictions = async (model, video) => {
   if(calcDistance(lefteyelower, lefteyeupper) < TOLERANCE && calcDistance(righteyelower, righteyeupper) < TOLERANCE){
     waitTime += PREDICTION_POLL_DELAY;
     if(waitTime % 1000 == 0 && waitTime < MAXTIME){
-      let timerTag = document.getElementsByTagName('p');
-      timerTag[0].textContent = "Time: " + (waitTime / 1000).toString() + 's';
+      let timerTag = document.getElementById('timer');
+      timerTag.textContent = (waitTime / 1000).toString() + " seconds";
       var audio = new Audio('beep.mp3');
       audio.play();
     }
