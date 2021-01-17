@@ -26,10 +26,6 @@ const handlePredictions = async (model, video) => {
   if(waitTime >= MAXTIME) {
     close();
   }
-  if (MAXTIME - waitTime <= 1000) {
-    var audio = new Audio('one.mp3');
-    audio.play();
-  }
   const facePredictions = await model.estimateFaces({ input: video });
   renderScatterGLMesh(facePredictions);
 

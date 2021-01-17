@@ -10,46 +10,29 @@ import '../audio/ding.mp3';
 import handleCloseEyesPrediction from './display/closeEyes';
 import { PREDICTION_POLL_DELAY } from './display/config';
 
+import getPose from './display/stretch';
+
+let posenet;
+let video;
+let canvas;
+
 /*
  *  Callback once video is loaded
  */ 
-const onVideoLoad = (video, model) => {
-  return setInterval(() => handleCloseEyesPrediction(model, video) , PREDICTION_POLL_DELAY);
+const onVideoLoad = (video, model, predictor) => {
+  return setInterval(() => predictor(model, video) , PREDICTION_POLL_DELAY);
 }
 
 
 /*
  *  Initialize the webcam video playback.
  */
-const initVideoContainer = (model) => {
+const initVideoContainer = (model, predictor) => {
   const video = document.getElementById('video-container');
   video.autoplay = true;
   video.loop = true;
-  video.addEventListener('loadeddata', () => onVideoLoad(video, model), false);
+  video.addEventListener('loadeddata', () => onVideoLoad(video, model, predictor), false);
   return video;
-}
-const getVideo = () => {
-  video = document.getElementById('video-container');
-};
-
-
-const getPose= async () => {
-  const flipHorizontal = true;
-
-  const posenetModel = posenet;
-
-  const findPoseDetectionFrame = async () => {
-    let poses = [];
-
-    const pose = await posenetModel.estimateSinglePose(video, {
-      flipHorizontal,
-    });
-
-    poses.push(pose);
-
-    return poses;
-  };
-  return await findPoseDetectionFrame();
 }
 
 
@@ -60,22 +43,31 @@ const isEyeCheck = () =>{
 const isStretchCheck = () =>{
   return true;
 }
+
+
 const main = async () => {
-  let timerTag = document.getElementsByTagName('p');
-  timerTag[0].textContent = "Time: 0s";
+  if(isStretchCheck()){
+    let header = document.getElementsByTagName('h1');
+    header[0].textContent = "Take a break for 20 seconds, stretch with your arms above your head!";
+    document.getElementById('scatter-gl-container').style = 'display:none';
+    let timerTag = document.getElementsByTagName('p');
+    timerTag[0].textContent = "Time: 0s";
+  }
+  else{
+    let timerTag = document.getElementsByTagName('p');
+    timerTag[0].textContent = "Time: 0s";
+  }
+  
+  const webcamStream = await window.navigator.mediaDevices.getUserMedia({ video: true });
   if(isEyeCheck()){
     const model = await faceLandmarksDetection.load(
       faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
-    const webcamStream = await window.navigator.mediaDevices.getUserMedia({ video: true });
-    const video = initVideoContainer(model);
+    const video = initVideoContainer(model, handleCloseEyesPrediction);
     video.srcObject = webcamStream;
     video.load();
   }
   else if(isStretchCheck()){
-    console.log('1')
     try {
-    console.log('2')
-
       posenet = await poseNet.load({
         architecture: "ResNet50",
         outputStride: 32,
@@ -83,18 +75,13 @@ const main = async () => {
         quantBytes: 2,
         multiplier: 1,
       });
-    console.log('3')
 
     } catch (error) {
       throw new Error("PoseNet failed to load");
     }
-    console.log('4')
-    getVideo();
-    console.log('5')
-
-    const pose = await getPose();
-    
-    console.log(pose)
+    const video = initVideoContainer(posenet, getPose);
+    video.srcObject = webcamStream;
+    video.load();
   }
 }
 
