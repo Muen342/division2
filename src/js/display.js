@@ -12,10 +12,6 @@ import { PREDICTION_POLL_DELAY } from './display/config';
 
 import getPose from './display/stretch';
 
-let posenet;
-let video;
-let canvas;
-
 /*
  *  Callback once video is loaded
  */ 
@@ -38,78 +34,70 @@ const initVideoContainer = (model, predictor) => {
   return video;
 }
 
-
-const isEyeCheck = () =>{
-  return true;
-}
-
-const isStretchCheck = () =>{
-  return false;
-}
-
-
-
-
 const main = async () => {
-  if(isStretchCheck()){
-    let header = document.getElementById('title');
-    header.textContent = "Take a break for 20 seconds, stretch with your arms above your head!";
-    document.getElementById('scatter-gl-container').style = 'display:none';
-    let timerTag = document.getElementById('timer');
-    timerTag.textContent = "0 seconds";
-  }
-  else{
-    let timerTag = document.getElementById('timer');
-    timerTag.textContent = "0 seconds";
-  }
-  
-  const webcamStream = await window.navigator.mediaDevices.getUserMedia({ video: true });
-  if(isEyeCheck()){
-    const model = await faceLandmarksDetection.load(
-      faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
-    const video = initVideoContainer(model, handleCloseEyesPrediction);
-    video.srcObject = webcamStream;
-    video.load();
-  }
-  else if(isStretchCheck()){
-    try {
-      posenet = await poseNet.load({
-        architecture: "ResNet50",
-        outputStride: 32,
-        inputResolution: { width: 250, height: 250 },
-        quantBytes: 2,
-        multiplier: 1,
-      });
+  const activities = [];
+  chrome.storage.sync.get(['activities'], async (res) => {
+    activities.push(...Object.entries(res.activities).filter(([activity, isActive]) => activity && isActive));
+    const currActivity = activities[Math.floor((Math.random() * activities.length))][0];
 
-    } catch (error) {
-      throw new Error("PoseNet failed to load");
+    if (currActivity === 'stretch') {
+      let header = document.getElementById('title');
+      header.textContent = "Take a break for 20 seconds, stretch with your arms above your head!";
+      document.getElementById('scatter-gl-container').style = 'display:none';
+      let timerTag = document.getElementById('timer');
+      timerTag.textContent = "0 seconds";
+    } else {
+      let timerTag = document.getElementById('timer');
+      timerTag.textContent = "0 seconds"
     }
-    const video = initVideoContainer(posenet, getPose);
-    video.srcObject = webcamStream;
-    video.load();
-    let counter = 0;
-    let waitTime = 0;
-    while(counter < 24){
-      if(counter < 4){
-        await sleep(1000);
-        counter++;
-        continue;
+
+    const webcamStream = await window.navigator.mediaDevices.getUserMedia({ video: true });
+    if (currActivity === 'stretch') {
+      let posenet;
+      try {
+        posenet = await poseNet.load({
+          architecture: "ResNet50",
+          outputStride: 32,
+          inputResolution: { width: 250, height: 250 },
+          quantBytes: 2,
+          multiplier: 1,
+        });
+
+      } catch (error) {
+        throw new Error("PoseNet failed to load");
       }
-      else{
-        await sleep(1000);
-        var audio = new Audio('beep.mp3');
-        audio.play();
-        waitTime++;
-        counter++;
-        let timerTag = document.getElementById('timer');
-        timerTag.textContent = waitTime.toString() + " seconds";
+      const video = initVideoContainer(posenet, getPose);
+      video.srcObject = webcamStream;
+      video.load();
+      let counter = 0;
+      let waitTime = 0;
+      while(counter < 24){
+        if(counter < 4){
+          await sleep(1000);
+          counter++;
+          continue;
+        } else{
+          await sleep(1000);
+          var audio = new Audio('beep.mp3');
+          audio.play();
+          waitTime++;
+          counter++;
+          let timerTag = document.getElementById('timer');
+          timerTag.textContent = waitTime.toString() + " seconds";
+        }
       }
+      var audio = new Audio('ding.mp3');
+      audio.play();
+      await sleep(500);
+      close();
+    } else {
+      const model = await faceLandmarksDetection.load(
+        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
+      const video = initVideoContainer(model, handleCloseEyesPrediction);
+      video.srcObject = webcamStream;
+      video.load();
     }
-    var audio = new Audio('ding.mp3');
-    audio.play();
-    await sleep(500);
-    close();
-  }
+  });
 }
 
 main();
