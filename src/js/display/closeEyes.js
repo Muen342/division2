@@ -6,8 +6,7 @@ const scatterGL = new ScatterGL(
   {'rotateOnStart': false, 'selectEnabled': false}
 );
 
-var waitTime = 0;
-
+let waitTime = 0;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -70,8 +69,6 @@ const handlePredictions = async (model, video) => {
       console.log('open', eyes)
     }
   }
-
-  
 }
 
 /*
@@ -90,5 +87,12 @@ const renderScatterGLMesh = (predictions) => {
   const dataset = new ScatterGL.Dataset(flattenedPointsData);
   scatterGL.render(dataset);
 }
+
+document.addEventListener("keypress", (e) => {
+  const scatterGLContainer = document.getElementById('scatter-gl-container');
+  scatterGLContainer.style.visibility = (scatterGLContainer.style.visibility === "hidden") 
+    ? "visible"
+    : "hidden";
+});
 
 export default handlePredictions;
