@@ -5,13 +5,17 @@ import '../audio/ding.mp3';
 import * as tfjs from '@tensorflow/tfjs';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import { ScatterGL } from 'scatter-gl';
+import { drawKeyPoints, drawSkeleton } from "./utils";
+import * as poseNet from "@tensorflow-models/posenet";
+import "@tensorflow/tfjs-backend-webgl";
 
 const TOLERANCE = 3;
 const PREDICTION_POLL_DELAY = 250;
 const MAXTIME = 3000;
 
-var waitTime = 0;
-
+let waitTime = 0;
+let posenet;
+let video;
 /*
  *  Calculates Euclidean distance between two 3D vectors
  */
@@ -121,18 +125,76 @@ const initScatterGLContainer = () => {
   const scatterGL = new ScatterGL(scatterGLContainer, {'rotateOnStart': false, 'selectEnabled': false});
   return scatterGL;
 }
+const getVideo = () => {
+  video = document.getElementById('video-container');
+};
 
+
+const getPose= async () => {
+  const flipHorizontal = true;
+
+  const posenetModel = posenet;
+
+  const findPoseDetectionFrame = async () => {
+    let poses = [];
+
+    const pose = await posenetModel.estimateSinglePose(video, {
+      flipHorizontal,
+    });
+
+    poses.push(pose);
+
+    return poses;
+  };
+  return await findPoseDetectionFrame();
+}
+
+
+const isEyeCheck = () =>{
+  return false;
+}
+
+const isStretchCheck = () =>{
+  return true;
+}
 const main = async () => {
   let timerTag = document.getElementsByTagName('p');
   timerTag[0].textContent = "Time: 0s";
-  const model = await faceLandmarksDetection.load(
-    faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
-  const webcamStream = await window.navigator.mediaDevices.getUserMedia({ video: true });
-  
-  const scatterGL = initScatterGLContainer();
-  const video = initVideoContainer(model, scatterGL);
-  video.srcObject = webcamStream;
-  video.load();
+  if(isEyeCheck()){
+    const model = await faceLandmarksDetection.load(
+      faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
+    const webcamStream = await window.navigator.mediaDevices.getUserMedia({ video: true });
+    
+    const scatterGL = initScatterGLContainer();
+    const video = initVideoContainer(model, scatterGL);
+    video.srcObject = webcamStream;
+    video.load();
+  }
+  else if(isStretchCheck()){
+    console.log('1')
+    try {
+    console.log('2')
+
+      posenet = await poseNet.load({
+        architecture: "ResNet50",
+        outputStride: 32,
+        inputResolution: { width: 250, height: 250 },
+        quantBytes: 2,
+        multiplier: 1,
+      });
+    console.log('3')
+
+    } catch (error) {
+      throw new Error("PoseNet failed to load");
+    }
+    console.log('4')
+    getVideo();
+    console.log('5')
+
+    const pose = await getPose();
+    
+    console.log(pose)
+  }
 }
 
 main();
