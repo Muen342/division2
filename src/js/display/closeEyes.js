@@ -8,6 +8,11 @@ const scatterGL = new ScatterGL(
 
 var waitTime = 0;
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /*
  *  Calculates Euclidean distance between two 3D vectors.
  */
@@ -23,12 +28,14 @@ const calcDistance = (lower, upper) => {
  *  Handle predictions from the face landmarks model.
  */
 const handlePredictions = async (model, video) => {
-  if(waitTime >= MAXTIME) {
-    close();
-  }
-  if (MAXTIME - waitTime <= 1000) {
-    var audio = new Audio('one.mp3');
+
+  if(waitTime >= MAXTIME){
+    let timerTag = document.getElementById('timer');
+    timerTag.textContent = "Time: " + (MAXTIME / 1000).toString + 's';
+    var audio = new Audio('ding.mp3');
     audio.play();
+    await sleep(500);
+    close();
   }
   const facePredictions = await model.estimateFaces({ input: video });
   renderScatterGLMesh(facePredictions);
@@ -55,23 +62,16 @@ const handlePredictions = async (model, video) => {
     console.log('NICE CLOSED EYES', eyes)
   } else {
     if(waitTime != 0){
-      let timerTag = document.getElementsByTagName('p');
-      timerTag[0].textContent = "Time: 0s";
+      waitTime = 0;
+      let timerTag = document.getElementById('timer');
+      timerTag.textContent = "0 seconds";
       var audio = new Audio('buzz.mp3');
       audio.play();
       console.log('open', eyes)
-      waitTime = 0;
     }
   }
 
-  if(waitTime >= MAXTIME){
-    let timerTag = document.getElementsByTagName('p');
-    timerTag[0].textContent = "Time: " + (MAXTIME / 1000).toString + 's';
-    var audio = new Audio('ding.mp3');
-    audio.play();
-    await sleep(500);
-    close();
-  }
+  
 }
 
 /*
