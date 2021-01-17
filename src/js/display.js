@@ -44,7 +44,7 @@ const handlePredictions = async (model, video, scatterGL) => {
 
   console.log('dist:', calcDistance(lefteyelower, lefteyeupper), calcDistance(righteyelower, righteyeupper))
   if(calcDistance(lefteyelower, lefteyeupper) < TOLERANCE && calcDistance(righteyelower, righteyeupper) < TOLERANCE){
-    waitTime += 500;
+    waitTime += PREDICTION_POLL_DELAY;
     if(waitTime % 1000 == 0 && waitTime < MAXTIME){
       let timerTag = document.getElementsByTagName('p');
       timerTag[0].textContent = "Time: " + (waitTime / 1000).toString() + 's';
