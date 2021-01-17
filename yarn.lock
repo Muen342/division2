@@ -15,6 +15,11 @@
     "@tensorflow-models/blazeface" "0.0.5"
     rimraf "^3.0.2"
 
+"@tensorflow-models/posenet@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@tensorflow-models/posenet/-/posenet-2.2.1.tgz#2f0a68d909842f59eec195f23c6f3d4cebc53fa8"
+  integrity sha512-n9/g6DfjAyrBTf/zt1haRCyWsgALxUCzg9/Ks3Y2mbYavRZVSCSTRPy/qlE5Hr4tLfyckGfDN14zmGTthNcg/g==
+
 "@tensorflow/tfjs-backend-cpu@2.6.0":
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-backend-cpu/-/tfjs-backend-cpu-2.6.0.tgz#bd0923ca438e945c4c9347a76e301a4fb1890d33"
