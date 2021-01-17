@@ -30,7 +30,7 @@ const handlePredictions = async (model, video) => {
 
   if(waitTime >= MAXTIME){
     let timerTag = document.getElementById('timer');
-    timerTag.textContent = "Time: " + (MAXTIME / 1000).toString + 's';
+    timerTag.textContent = (MAXTIME / 1000).toString() + ' seconds';
     var audio = new Audio('ding.mp3');
     audio.play();
     await sleep(500);

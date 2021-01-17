@@ -69,27 +69,6 @@ const main = async () => {
       const video = initVideoContainer(posenet, getPose);
       video.srcObject = webcamStream;
       video.load();
-      let counter = 0;
-      let waitTime = 0;
-      while(counter < 24){
-        if(counter < 4){
-          await sleep(1000);
-          counter++;
-          continue;
-        } else{
-          await sleep(1000);
-          var audio = new Audio('beep.mp3');
-          audio.play();
-          waitTime++;
-          counter++;
-          let timerTag = document.getElementById('timer');
-          timerTag.textContent = waitTime.toString() + " seconds";
-        }
-      }
-      var audio = new Audio('ding.mp3');
-      audio.play();
-      await sleep(500);
-      close();
     } else {
       const model = await faceLandmarksDetection.load(
         faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
