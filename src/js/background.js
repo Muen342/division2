@@ -5,5 +5,6 @@ import '../img/icon-34.png';
 chrome.alarms.onAlarm.addListener(buttonClicked);
 
 function buttonClicked(alarm) {
-  chrome.windows.create({ url: "display.html" });
+  chrome.windows.create({ url: "display.html", 
+  state:"fullscreen"});
 }

@@ -1,15 +1,51 @@
+import '../audio/one.mp3';
+
 import * as tfjs from '@tensorflow/tfjs';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
-
+const TOLERANCE = 3;
 const PREDICTION_POLL_DELAY = 500;
+const MAXTIME = 3000;
+var waitTime = 0;
+const killPage = () =>{
+    close();
+}
+
+const calcDistance = (lower, upper) => {
+    let cummulative = 0;
+    for(let i=0; i<3; i++){
+        cummulative += (lower[i] - upper[i]) * (lower[i] - upper[i]);
+    }
+    return Math.sqrt(cummulative);
+}
 
 /*
  *  Get predictions from the model.
  */
-const getPredictions = async (model, video) => {
+const handlePredictions = async (model, video) => {
+  if(waitTime >= MAXTIME){
+      killPage();
+  }
+  if(MAXTIME - waitTime <= 1000){
+    var audio = new Audio('one.mp3');
+    audio.play();
+  }
   const facePredictions = await model.estimateFaces({ input: video });
-  console.log(facePredictions);
-  return facePredictions;
+  const lefteyeupper = facePredictions[0].annotations.leftEyeUpper0[3];
+  const lefteyelower = facePredictions[0].annotations.leftEyeLower0[4];
+  const righteyeupper = facePredictions[0].annotations.rightEyeUpper0[3];
+  const righteyelower = facePredictions[0].annotations.rightEyeLower0[4];
+
+  const eyes = {lefteyeupper, lefteyelower, righteyeupper, righteyelower}
+  console.log('dist:', calcDistance(lefteyelower, lefteyeupper), calcDistance(righteyelower, righteyeupper))
+  console.log('waittime', waitTime)
+  if(calcDistance(lefteyelower, lefteyeupper) < TOLERANCE && calcDistance(righteyelower, righteyeupper) < TOLERANCE){
+    waitTime += 500;
+    console.log('NICE CLOSED EYES', eyes)
+  }
+  else{
+    console.log('open', eyes)
+    waitTime = 0;
+  }
 }
 
 
@@ -17,7 +53,7 @@ const getPredictions = async (model, video) => {
  *  Callback once video is loaded
  */ 
 const onVideoLoad = (video, model) => {
-  return setInterval(() => getPredictions(model, video) , PREDICTION_POLL_DELAY);
+  return setInterval(() => handlePredictions(model, video) , PREDICTION_POLL_DELAY);
 }
 
 
