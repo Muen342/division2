@@ -1,6 +1,11 @@
 import { ScatterGL } from 'scatter-gl';
 import { MAXTIME, TOLERANCE, PREDICTION_POLL_DELAY } from "./config";
 
+const NUM_KEYPOINTS = 468;
+const NUM_IRIS_KEYPOINTS = 5;
+const RED = "#FF2C35";
+const BLUE = "#157AB3";
+
 const scatterGL = new ScatterGL(
   document.getElementById('scatter-gl-container'),
   {'rotateOnStart': false, 'selectEnabled': false}
@@ -85,6 +90,13 @@ const renderScatterGLMesh = (predictions) => {
     flattenedPointsData = flattenedPointsData.concat(pointsData[i]);
   }
   const dataset = new ScatterGL.Dataset(flattenedPointsData);
+  
+  scatterGL.setPointColorer((i) => {
+    if(i % (NUM_KEYPOINTS + NUM_IRIS_KEYPOINTS * 2) > NUM_KEYPOINTS) {
+      return RED;
+    }
+    return BLUE;
+  });
   scatterGL.render(dataset);
 }
 
