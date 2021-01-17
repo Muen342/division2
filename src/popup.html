@@ -4,9 +4,21 @@
   <meta charset="utf-8">
   <script src="js/popup.js"></script>
 </head>
-<body>
-  <h1> Use Di/Vision</h1>
-  <a href="" id="alarmOn">ON</a>
-<a href="" id="alarmOff">OFF</a>
+<body style="height:200px;width:250px;">
+  <h1> Use Di|Vision</h1>
+  <div id="alarm-container">
+    <a href="" id="alarmOn">ON</a>
+    <a href="" id="alarmOff">OFF</a>
+  </div>
+
+  <label for="activity-container">
+    Select activities. (Activities will be randomly selected from the pool)
+  </label>
+  <div id="activity-container">
+    <label for="activity-close-eyes">Close Your Eyes</label>
+    <input type="checkbox" id="activity-close-eyes" name="activity" value="close-eyes">
+    <label for="activity-stretch">Stretch</label>
+    <input type="checkbox" id="activity-stretch" name="activity" value="stretch">
+  </div>
 </body>
 </html>
