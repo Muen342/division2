@@ -65,7 +65,7 @@ const handlePredictions = async (model, video, scatterGL) => {
 
   if(waitTime >= MAXTIME){
     let timerTag = document.getElementsByTagName('p');
-    timerTag[0].textContent = "Time: 20s";
+    timerTag[0].textContent = "Time: " + (MAXTIME / 1000).toString + 's';
     var audio = new Audio('ding.mp3');
     audio.play();
     await sleep(500);
