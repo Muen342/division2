@@ -6,12 +6,63 @@
   <title>Di|vision</title>
   <link rel="stylesheet" href="css/styles.css?v=1.0">
   <script src="js/display.bundle.js"></script>
+  <link rel="shortcut icon" href="img/icon-128.png">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 
+<style>
+    body{
+        color: #94160c;
+        background: rgb(188,238,174);
+        background: radial-gradient(circle, rgba(188,238,174,1) 0%, rgba(148,230,233,1) 100%);
+        display:block;
+    }
+    video {
+        display: block;
+        margin: 0 auto;
+    }
+    p{
+        font-family:Arial, Helvetica, sans-serif;
+        display: block;
+        margin-left: 100%;
+        margin-right: 20%;
+    }
+
+    #scatter-gl-container{
+        float: right;
+        width: 360px;
+        height: 240px;
+        margin-right: 5%;
+        margin-left: 5%;
+    }
+
+
+</style>
+<header>
+    <div class="w3-container w3-teal"> 
+      <div class="intro-text">
+        <div class="col-sm-1"></div>
+        <div class="intro-heading"> <i> Di | Vision Hack the North 2020++ </i></div>
+      </div>
+    </div>
+</header>
+
+
 <body>
-    <h1>Take a break for 20 seconds close your eyes!</h1>
-    <p id="timer"></p>
-    <video id="video-container"></video>
-    <div id="scatter-gl-container"></div>
+    <div class="w3-container" >
+        <h1> <b> <i>Take a break for 20 seconds, close your eyes! </i></b></h1>
+    </div>
+    <div class="w3-cell-row">
+        <div class="w3-container w3-cell w3-cell-middle w3-display-left" style="">
+                    <p style="font-size: 40px; font-family:  " class="" id="timer"></p>
+        </div>
+
+        <div class="w3-container w3-cell w3-cell-middle w3-display-middle" >
+            <video id="video-container"></video>
+        </div>
+
+        <div class="w3-container w3-cell w3-cell-middle w3-display-right" id="scatter-gl-container"></div>
+        <p></p>
+    </div>
 </body>
 </html>
