@@ -43,7 +43,12 @@ const handlePredictions = async (model, video) => {
     waitTime += PREDICTION_POLL_DELAY;
     if(waitTime % 1000 == 0 && waitTime < MAXTIME){
       let timerTag = document.getElementById('timer');
-      timerTag.textContent = (waitTime / 1000).toString() + " seconds";
+      if ((waitTime/1000).toString() == '1'){
+        timerTag.textContent = (waitTime / 1000).toString() + " second";
+      }
+      else{
+        timerTag.textContent = (waitTime / 1000).toString() + " seconds";
+      }
       var audio = new Audio('beep.mp3');
       audio.play();
     }
