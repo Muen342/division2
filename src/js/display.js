@@ -23,6 +23,9 @@ const onVideoLoad = (video, model, predictor) => {
   return setInterval(() => predictor(model, video) , PREDICTION_POLL_DELAY);
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 /*
  *  Initialize the webcam video playback.
@@ -43,6 +46,8 @@ const isEyeCheck = () =>{
 const isStretchCheck = () =>{
   return true;
 }
+
+
 
 
 const main = async () => {
@@ -82,6 +87,28 @@ const main = async () => {
     const video = initVideoContainer(posenet, getPose);
     video.srcObject = webcamStream;
     video.load();
+    let counter = 0;
+    let waitTime = 0;
+    while(counter < 24){
+      if(counter < 4){
+        await sleep(1000);
+        counter++;
+        continue;
+      }
+      else{
+        await sleep(1000);
+        var audio = new Audio('beep.mp3');
+        audio.play();
+        waitTime++;
+        counter++;
+        let timerTag = document.getElementsByTagName('p');
+        timerTag[0].textContent = waitTime.toString() + " seconds";
+      }
+    }
+    var audio = new Audio('ding.mp3');
+    audio.play();
+    await sleep(500);
+    close();
   }
 }
 
