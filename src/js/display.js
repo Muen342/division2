@@ -47,6 +47,8 @@ const main = async () => {
       let timerTag = document.getElementById('timer');
       timerTag.textContent = "0 seconds";
     } else {
+      let header = document.getElementById('title');
+      header.textContent = 'Take a break for 20 seconds, close your eyes!';
       let timerTag = document.getElementById('timer');
       timerTag.textContent = "0 seconds"
     }
