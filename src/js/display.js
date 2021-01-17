@@ -39,19 +39,26 @@ const handlePredictions = async (model, video) => {
     console.log('NICE CLOSED EYES', eyes)
   }
   else{
-    var audio = new Audio('buzz.mp3');
-    audio.play();
-    console.log('open', eyes)
-    waitTime = 0;
+    if(waitTime != 0){
+      var audio = new Audio('buzz.mp3');
+      audio.play();
+      console.log('open', eyes)
+      waitTime = 0;
+    }
   }
 
   if(waitTime >= MAXTIME){
     var audio = new Audio('ding.mp3');
     audio.play();
+    await sleep(500);
     close();
   }
 }
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 /*
  *  Callback once video is loaded
