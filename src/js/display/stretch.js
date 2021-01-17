@@ -9,7 +9,6 @@ const getPose= async (posenetModel, video) => {
     timerTag.textContent = (MAXTIME / 1000).toString() + ' seconds';
     var audio = new Audio('ding.mp3');
     audio.play();
-    await sleep(500);
     close();
   }
     const flipHorizontal = true;
