@@ -1,4 +1,6 @@
-import '../audio/one.mp3';
+import '../audio/beep.mp3';
+import '../audio/buzz.mp3';
+import '../audio/ding.mp3';
 
 import * as tfjs from '@tensorflow/tfjs';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
@@ -6,9 +8,6 @@ const TOLERANCE = 3;
 const PREDICTION_POLL_DELAY = 500;
 const MAXTIME = 3000;
 var waitTime = 0;
-const killPage = () =>{
-    close();
-}
 
 const calcDistance = (lower, upper) => {
     let cummulative = 0;
@@ -22,13 +21,6 @@ const calcDistance = (lower, upper) => {
  *  Get predictions from the model.
  */
 const handlePredictions = async (model, video) => {
-  if(waitTime >= MAXTIME){
-      killPage();
-  }
-  if(MAXTIME - waitTime <= 1000){
-    var audio = new Audio('one.mp3');
-    audio.play();
-  }
   const facePredictions = await model.estimateFaces({ input: video });
   const lefteyeupper = facePredictions[0].annotations.leftEyeUpper0[3];
   const lefteyelower = facePredictions[0].annotations.leftEyeLower0[4];
@@ -40,14 +32,39 @@ const handlePredictions = async (model, video) => {
   console.log('waittime', waitTime)
   if(calcDistance(lefteyelower, lefteyeupper) < TOLERANCE && calcDistance(righteyelower, righteyeupper) < TOLERANCE){
     waitTime += 500;
+    if(waitTime % 1000 == 0 && waitTime < MAXTIME){
+      let timerTag = document.getElementsByTagName('p');
+      timerTag[0].textContent = "Time: " + (waitTime / 1000).toString() + 's';
+      var audio = new Audio('beep.mp3');
+      audio.play();
+    }
     console.log('NICE CLOSED EYES', eyes)
   }
   else{
-    console.log('open', eyes)
-    waitTime = 0;
+    if(waitTime != 0){
+      let timerTag = document.getElementsByTagName('p');
+      timerTag[0].textContent = "Time: 0s";
+      var audio = new Audio('buzz.mp3');
+      audio.play();
+      console.log('open', eyes)
+      waitTime = 0;
+    }
+  }
+
+  if(waitTime >= MAXTIME){
+    let timerTag = document.getElementsByTagName('p');
+    timerTag[0].textContent = "Time: 20s";
+    var audio = new Audio('ding.mp3');
+    audio.play();
+    await sleep(500);
+    close();
   }
 }
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 /*
  *  Callback once video is loaded
@@ -82,6 +99,8 @@ const initMediaRecorder = (stream, video) => {
 }
 
 const main = async () => {
+  let timerTag = document.getElementsByTagName('p');
+  timerTag[0].textContent = "Time: 0s";
   const model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
 
