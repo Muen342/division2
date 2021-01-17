@@ -33,6 +33,8 @@ const handlePredictions = async (model, video) => {
   if(calcDistance(lefteyelower, lefteyeupper) < TOLERANCE && calcDistance(righteyelower, righteyeupper) < TOLERANCE){
     waitTime += 500;
     if(waitTime % 1000 == 0 && waitTime < MAXTIME){
+      let timerTag = document.getElementsByTagName('p');
+      timerTag[0].textContent = "Time: " + (waitTime / 1000).toString() + 's';
       var audio = new Audio('beep.mp3');
       audio.play();
     }
@@ -40,6 +42,8 @@ const handlePredictions = async (model, video) => {
   }
   else{
     if(waitTime != 0){
+      let timerTag = document.getElementsByTagName('p');
+      timerTag[0].textContent = "Time: 0s";
       var audio = new Audio('buzz.mp3');
       audio.play();
       console.log('open', eyes)
@@ -48,6 +52,8 @@ const handlePredictions = async (model, video) => {
   }
 
   if(waitTime >= MAXTIME){
+    let timerTag = document.getElementsByTagName('p');
+    timerTag[0].textContent = "Time: 20s";
     var audio = new Audio('ding.mp3');
     audio.play();
     await sleep(500);
@@ -93,6 +99,8 @@ const initMediaRecorder = (stream, video) => {
 }
 
 const main = async () => {
+  let timerTag = document.getElementsByTagName('p');
+  timerTag[0].textContent = "Time: 0s";
   const model = await faceLandmarksDetection.load(
     faceLandmarksDetection.SupportedPackages.mediapipeFacemesh);
 
