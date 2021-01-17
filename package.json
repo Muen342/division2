@@ -9,6 +9,8 @@
   "devDependencies": {
     "@tensorflow-models/face-landmarks-detection": "0.0.1",
     "@tensorflow/tfjs": "2.6.0",
+    "@tensorflow-models/posenet": "^2.2.1",
+    "@tensorflow/tfjs-backend-webgl": "^2.7.0",
     "scatter-gl": "0.0.1",
     "three": "0.110.0",
     "clean-webpack-plugin": "3.0.0",
