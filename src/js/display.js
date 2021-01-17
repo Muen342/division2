@@ -59,7 +59,7 @@ const main = async () => {
     timerTag.textContent = "0 seconds";
   }
   else{
-    let timerTag = document.getElementsByTagName('timer');
+    let timerTag = document.getElementById('timer');
     timerTag.textContent = "0 seconds";
   }
   
