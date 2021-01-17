@@ -1,6 +1,5 @@
 import * as tfjs from '@tensorflow/tfjs';
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
-import { drawKeyPoints, drawSkeleton } from "./utils";
 import * as poseNet from "@tensorflow-models/posenet";
 import "@tensorflow/tfjs-backend-webgl";
 
@@ -8,19 +7,14 @@ import '../audio/beep.mp3';
 import '../audio/buzz.mp3';
 import '../audio/ding.mp3';
 import handleCloseEyesPrediction from './display/closeEyes';
-import { PREDICTION_POLL_DELAY } from './display/config';
-
 import getPose from './display/stretch';
+import { PREDICTION_POLL_DELAY } from './display/config';
 
 /*
  *  Callback once video is loaded
  */ 
 const onVideoLoad = (video, model, predictor) => {
   return setInterval(() => predictor(model, video) , PREDICTION_POLL_DELAY);
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /*
@@ -38,7 +32,9 @@ const main = async () => {
   const activities = [];
   chrome.storage.sync.get(['activities'], async (res) => {
     activities.push(...Object.entries(res.activities).filter(([activity, isActive]) => activity && isActive));
-    const currActivity = activities[Math.floor((Math.random() * activities.length))][0];
+    const currActivity = activities.length > 0 
+      ? activities[Math.floor((Math.random() * activities.length))][0]
+      : null;
 
     if (currActivity === 'stretch') {
       let header = document.getElementById('title');
