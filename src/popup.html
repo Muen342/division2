@@ -4,21 +4,20 @@
   <meta charset="utf-8">
   <script src="js/popup.js"></script>
 </head>
-<body style="height:200px;width:250px;background: rgb(188,238,174);
-        background: radial-gradient(circle, rgba(188,238,174,1) 0%, rgba(148,230,233,1) 100%);">
-  <h1> <i> Welcome to: <br></h1> 
+<body style="height:200px;width:200px;background: rgb(188,238,174);
+             background: radial-gradient(circle, rgba(188,238,174,1) 0%, rgba(148,230,233,1) 100%);">
   <h1 style="color: #94160c"><strong> Di | Vision </strong></i></h1>
-  <div id="alarm-container">
-    <label>Turn Di | Vision</label>
-    <button href="" id="alarmOn">ON </button>
-    <button href="" id="alarmOff">OFF </button>
+  
+  <div style="font-weight:bold">Turn Di | Vision</div>
+  <div id="alarm-container" style="padding-top:10px;padding-bottom:10px;">
+    <button href="" id="alarmOn">ON</button>
+    <button href="" id="alarmOff">OFF</button>
   </div>
   <br>
 
-  <label for="activity-container">
-    Select activities. (Activities will be randomly selected from the pool)
-  </label>
-  <div id="activity-container">
+  <div style="font-weight:bold">Selected Activities</div>
+  <div>(Chosen activities will be randomly selected from the pool)</div>
+  <div id="activity-container" style="padding-top:10px;">
     <label for="activity-close-eyes">Close Your Eyes</label>
     <input type="checkbox" id="activity-close-eyes" name="activity" value="close-eyes">
     <label for="activity-stretch">Stretch</label>
